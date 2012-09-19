@@ -9,6 +9,7 @@
 *.sup
 *.bak
 *.tmproj
+dist/
 tmp/
 my_config.py
 js_config.py

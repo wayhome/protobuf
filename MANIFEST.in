@@ -1,0 +1,4 @@
+include README.txt
+include CHANGES
+recursive-include src *.proto
+recursive-include python *.h *.cc
