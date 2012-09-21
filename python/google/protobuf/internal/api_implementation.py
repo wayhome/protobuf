@@ -61,4 +61,4 @@ if _implementation_type != 'python':
 # that differences between APIs will be maintained.
 # Please don't use this function if possible.
 def Type():
-  return _implementation_type
+  return 'cpp'
