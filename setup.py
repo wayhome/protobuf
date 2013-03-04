@@ -66,6 +66,61 @@ def generate_proto(source):
             sys.exit(-1)
 
 
+
+
+
+def GenerateUnittestProtos():
+    generate_proto("./src/google/protobuf/unittest.proto")
+    generate_proto("./src/google/protobuf/unittest_custom_options.proto")
+    generate_proto("./src/google/protobuf/unittest_import.proto")
+    generate_proto("./src/google/protobuf/unittest_import_public.proto")
+    generate_proto("./src/google/protobuf/unittest_mset.proto")
+    generate_proto("./src/google/protobuf/unittest_no_generic_services.proto")
+    generate_proto("google/protobuf/internal/more_extensions.proto")
+    generate_proto("google/protobuf/internal/more_extensions_dynamic.proto")
+    generate_proto("google/protobuf/internal/more_messages.proto")
+    generate_proto("google/protobuf/internal/factory_test1.proto")
+    generate_proto("google/protobuf/internal/factory_test2.proto")
+
+
+def MakeTestSuite():
+        # This is apparently needed on some systems to make sure that the tests
+        # work even if a previous version is already installed.
+    if 'google' in sys.modules:
+        del sys.modules['google']
+
+    GenerateUnittestProtos()
+
+    import unittest
+    import google.protobuf.internal.generator_test as generator_test
+    import google.protobuf.internal.descriptor_test as descriptor_test
+    import google.protobuf.internal.reflection_test as reflection_test
+    import google.protobuf.internal.service_reflection_test \
+        as service_reflection_test
+    import google.protobuf.internal.text_format_test as text_format_test
+    import google.protobuf.internal.wire_format_test as wire_format_test
+    import google.protobuf.internal.unknown_fields_test as unknown_fields_test
+    import google.protobuf.internal.descriptor_database_test \
+        as descriptor_database_test
+    import google.protobuf.internal.descriptor_pool_test as descriptor_pool_test
+    import google.protobuf.internal.message_factory_test as message_factory_test
+    import google.protobuf.internal.message_cpp_test as message_cpp_test
+    import google.protobuf.internal.reflection_cpp_generated_test \
+        as reflection_cpp_generated_test
+
+    loader = unittest.defaultTestLoader
+    suite = unittest.TestSuite()
+    for test in [generator_test,
+                 descriptor_test,
+                 reflection_test,
+                 service_reflection_test,
+                 text_format_test,
+                 wire_format_test]:
+        suite.addTest(loader.loadTestsFromModule(test))
+
+    return suite
+
+
 class clean(_clean):
     def run(self):
     # Delete generated files in the code tree.
@@ -91,58 +146,23 @@ class build_py(_build_py):
         _build_py.run(self)
 
 
-def MakeTestSuite():
-        # This is apparently needed on some systems to make sure that the tests
-        # work even if a previous version is already installed.
-    if 'google' in sys.modules:
-        del sys.modules['google']
-
-    generate_proto("./src/google/protobuf/unittest.proto")
-    generate_proto("./src/google/protobuf/unittest_custom_options.proto")
-    generate_proto("./src/google/protobuf/unittest_import.proto")
-    generate_proto("./src/google/protobuf/unittest_mset.proto")
-    generate_proto("./src/google/protobuf/unittest_no_generic_services.proto")
-    generate_proto("google/protobuf/internal/more_extensions.proto")
-    generate_proto("google/protobuf/internal/more_messages.proto")
-
-    import unittest
-    import google.protobuf.internal.generator_test as generator_test
-    import google.protobuf.internal.descriptor_test as descriptor_test
-    import google.protobuf.internal.reflection_test as reflection_test
-    import google.protobuf.internal.service_reflection_test \
-        as service_reflection_test
-    import google.protobuf.internal.text_format_test as text_format_test
-    import google.protobuf.internal.wire_format_test as wire_format_test
-
-    loader = unittest.defaultTestLoader
-    suite = unittest.TestSuite()
-    for test in [generator_test,
-                 descriptor_test,
-                 reflection_test,
-                 service_reflection_test,
-                 text_format_test,
-                 wire_format_test]:
-        suite.addTest(loader.loadTestsFromModule(test))
-
-    return suite
-
 if __name__ == '__main__':
     ext_module_list = []
 
     # C++ implementation extension
-    #if os.getenv("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python") == "cpp":
-    print "Using EXPERIMENTAL C++ Implmenetation."
+    if  os.getenv("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "cpp") == "cpp":
 
-    ext_module_list.append(Extension(
-        "google.protobuf.internal._net_proto2___python",
-        ["python/google/protobuf/pyext/python_descriptor.cc",
-            "python/google/protobuf/pyext/python_protobuf.cc",
-            "python/google/protobuf/pyext/python-proto2.cc"],
-        include_dirs=["python"],
-        libraries=["protobuf"]))
+        print "Using EXPERIMENTAL C++ Implmenetation."
+        ext_module_list.append(Extension(
+            "google.protobuf.internal._net_proto2___python",
+            ["python/google/protobuf/pyext/python_descriptor.cc",
+                "python/google/protobuf/pyext/python_protobuf.cc",
+                "python/google/protobuf/pyext/python-proto2.cc"],
+            include_dirs=["python"],
+            libraries=["protobuf"]))
 
     setup(name='protobuf',
-          version='2.4.1',
+          version='2.5.1',
           packages=['google'],
           namespace_packages=['google'],
           package_dir={'': 'python'},
@@ -154,6 +174,7 @@ if __name__ == '__main__':
           'google.protobuf.internal.cpp_message',
           'google.protobuf.internal.decoder',
           'google.protobuf.internal.encoder',
+          'google.protobuf.internal.enum_type_wrapper',
           'google.protobuf.internal.message_listener',
           'google.protobuf.internal.python_message',
           'google.protobuf.internal.type_checkers',
@@ -161,6 +182,9 @@ if __name__ == '__main__':
           'google.protobuf.descriptor',
           'google.protobuf.descriptor_pb2',
           'google.protobuf.compiler.plugin_pb2',
+          'google.protobuf.descriptor_database',
+          'google.protobuf.descriptor_pool',
+          'google.protobuf.message_factory',
           'google.protobuf.message',
           'google.protobuf.reflection',
           'google.protobuf.service',

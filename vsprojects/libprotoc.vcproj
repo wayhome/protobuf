@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="libprotoc"
 	ProjectGUID="{B84FF31A-5F9A-46F8-AB22-DBFC9BECE3BE}"
 	Keyword="Win32Proj"
@@ -208,6 +208,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\google\protobuf\compiler\cpp\cpp_options.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\google\protobuf\compiler\cpp\cpp_primitive_field.h"
 				>
 			</File>
@@ -265,6 +269,14 @@
 			</File>
 			<File
 				RelativePath="..\src\google\protobuf\compiler\java\java_string_field.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\google\protobuf\compiler\java\java_doc_comment.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\google\protobuf\compiler\java\java_doc_comment.cc"
 				>
 			</File>
 			<File
