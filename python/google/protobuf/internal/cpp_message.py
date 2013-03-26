@@ -482,6 +482,8 @@ def _AddInitMethod(message_descriptor, cls):
         if field_cdescriptor.cpp_type == _CPPTYPE_MESSAGE:
           field_name = getattr(self, field_name)
           for val in field_value:
+            if isinstance(val, dict):
+                val = field_name._subclass(**val)
             field_name.add().MergeFrom(val)
         else:
           getattr(self, field_name).extend(field_value)
