@@ -162,7 +162,7 @@ if __name__ == '__main__':
             libraries=["protobuf"]))
 
     setup(name='protobuf',
-          version='2.5.1',
+          version='2.5.2',
           packages=['google'],
           namespace_packages=['google'],
           package_dir={'': 'python'},

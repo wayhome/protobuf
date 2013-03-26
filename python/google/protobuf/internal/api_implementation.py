@@ -40,7 +40,7 @@ import os
 # of the Python API. Right now only 'python' and 'cpp' are valid values. Any
 # other value will be ignored.
 _implementation_type = os.getenv('PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION',
-                                 'python')
+                                 'cpp')
 
 
 if _implementation_type != 'python':
